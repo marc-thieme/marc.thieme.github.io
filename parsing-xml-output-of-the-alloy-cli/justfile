@@ -1,0 +1,17 @@
+set fallback := true
+build := ".." / "build" / "alloy"
+xml-file := `realpath ../build/alloy/alloy-output/*.xml || true`
+
+_prepare:
+    mkdir -p {{build}}
+
+alloy-jar := build / "alloy-jar-file"
+_ensure-alloy-jar: _prepare
+    [ ! -f {{alloy-jar}} ] && curl -L -o {{alloy-jar}} "https://github.com/AlloyTools/org.alloytools.alloy/releases/download/v6.2.0/org.alloytools.alloy.dist.jar" || true
+    
+run-example type="xml": _ensure-alloy-jar
+    java -jar {{alloy-jar}} exec -f -t {{type}} -o {{build}}/alloy-output ./example.als
+    echo $(realpath ../build/alloy/alloy-output/*.xml)
+
+xpath expr input=xml-file:
+    cat '{{input}}' | xq -x '{{expr}}'
