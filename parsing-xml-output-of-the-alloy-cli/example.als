@@ -1,17 +1,25 @@
-abstract sig Object {}
+sig Name {}
+abstract sig Object {
+  name: Name
+}
 
 sig Dir extends Object {
-  entries : set Entry
+  entries : set Object
 }
 
 sig File extends Object {}
-
 one sig Root extends Dir {}
 
-sig Entry {
-  object : one Object,
-  name   : one Name
+fact {
+  // Root is actually the root
+  Root.*entries = Object
+  // Each file belongs to some directory
+  entries :> File in Dir one -> File
 }
 
-sig Name {}
-
+run {
+  // Root contains at least one file
+  some Root.entries & File
+  // Filesystem is deeper than two layers
+  some Root.entries.entries
+} for 8
