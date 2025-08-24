@@ -135,6 +135,11 @@ For `json`, the output of the above example looks like this:
   "utctime":1755967945796
 }
 ```
+> [!WARNING] 
+> It seems like the analyzer has a bug at the moment which makes json output not work correctly.
+> The following paragraph describes how the output should look like.
+> However, I advice against using it at the moment since I don't know why it is not working at the moment.
+
 As we can see, the `instances` field holds  a list of all values of the generated model.
 Each instance further contains the values for all fields of the entities' signature.
 However, it does not provide the signature that each entity belongs to.
